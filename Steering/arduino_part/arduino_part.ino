@@ -1,38 +1,45 @@
-int data;
-
+int x = 0;
+int y = 0;
+int veriX = 0;
+int veriY = 0;
+int sum = 0;
+int sum2 = 0;
 void setup() {
   // put your setup code here, to run once:
+pinMode(P1_0,INPUT);
+pinMode(A7,INPUT);
+pinMode(P2_1,INPUT_PULLUP);
 Serial.begin(9600);
-pinMode(4,INPUT_PULLUP);
-pinMode(5,INPUT_PULLUP);
 
 }
 
 void loop() {
-  data = analogRead(A4);
-  Serial.print(data);
+  veriY =  analogRead(A7);
+  veriX =  analogRead(P1_0);
+  sum = sum + veriX;
+  sum2 = sum2 + veriY;
+  x++;
   
- 
-  if(digitalRead(4)== LOW)
+  if(x==20)
   {
-   
-    Serial.print('1');
-    
+   sum = sum / 20;  
+   sum2 = sum2 /20;
+   sum = map(sum ,0,1023 , 0, 3000);
+   sum2 = sum2 - 3800;
+   sum2 = map(sum2 ,0,1023 , 0, 1500);
+   if(sum2 < 0)
+   sum2 = 0;
+   Serial.print(sum);
+   Serial.print('#');
+   Serial.print(sum2);
+   Serial.print('#');
+   if(digitalRead(P2_1)==0)
+   Serial.println("10");
+   else
+   Serial.println("00");
+   sum = 0;
+   sum2 = 0;
+   x = 0;
   }
-if(digitalRead(4)== HIGH)
-  {
-    Serial.print('0');
-  }
-   if(digitalRead(5)== LOW)
-  {
-   
-    Serial.println('1');
-    
-  }
-if(digitalRead(5)== HIGH)
-  {
-    Serial.println('0');
-  }
-  
-delay(1000);
+  delay(1);
 }
